@@ -1,3 +1,12 @@
+# Ce script extrait les données du système Hikvision. Pour utiliser:
+# 1) Dans Power BI, créer une nouvelle source de données de type "Python script" et copier/coller ce fichier en entier
+#    Ceci dépend d'une installation Python sur l'ordinateur où on développe le rapport Power BI. S'assurer que l'exécutable de Python soit dans le PATH.
+# 2) Pour permettre le rafraîchissement de ces données une fois le rapport dans le Power BI Service, qui ne supporte pas de lui-même exécuter un script Python,
+#    installer le "On-Premises Data Gateway (Personal mode)" selon les instructions ici: https://learn.microsoft.com/en-ca/power-bi/connect-data/service-gateway-onprem.
+# 3) Dans le Power BI Service, aller dans les paramètres du data set du rapport en question, et vérifier que la section "Gateway connection" indique l'utilisation
+#    de ce qui vient d'être installé. En cas d'erreur de type "Module 'xyz' not found" (erreur d'exécution du script Python), simplement installer les modules manquants
+#    sur le serveur hôte avec "pip install xyz".
+
 # Extracts data from a Hikvision camera system equipped with license plate recognition
 #
 # Authentication is based on https://github.com/JakeVincet/nvt/blob/master/2018/hikvision/gb_hikvision_ip_camera_default_credentials.nasl
@@ -13,11 +22,11 @@ from hashlib import sha256
 from urllib.parse import parse_qs, urlparse
 
 # Target server and port
-host = ''
+host = '91.183.96.120:8101'
 
 # Auth params
-username = ''
-password = ''
+username = '' # demander à Gilles
+password = '' # demander à Gilles
 
 # Search parameters
 searchId = uuid.uuid4() # common id used across paging requests
@@ -25,7 +34,7 @@ searchQueryPageSize = 50
 searchRangeDaysBack = 14
 
 # Camera track identifiers
-tracks = []
+tracks = [103, 203]
 
 def get_authentication_cookies():
     # Get encryption params
